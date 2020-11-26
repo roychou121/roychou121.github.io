@@ -91,8 +91,9 @@
             <p>在建立 GI 的順序很重要，建議由大建到小(如上圖須由左到右)，以免發生記憶體破碎的問題。</p>
           </div>
 
-<p>GI 其位置及對應的 ID 表如下</p>
-<img src= "/img/loading.gif" data-src="/2020/10/29/nvidia-A100-MIG/placement.PNG" class="" title="GI 其位置及對應的 ID 表">
+<!-- GI 其位置及對應的 ID 表如下
+
+<img src= "/img/loading.gif" data-src="/2020/10/29/nvidia-A100-MIG/placement.PNG" class="" title="GI 其位置及對應的 ID 表"> -->
 
 <h4 id="建立-GI"><a href="#建立-GI" class="headerlink" title="建立 GI"></a>建立 GI</h4><p>假設我要建立兩個 <code>3g.20gb</code> 的 GI，建立指令可以用 <code>Name</code> 或 <code>ID</code>。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> ID</span></span><br><span class="line">sudo nvidia-smi mig -i 0 -cgi 9</span><br><span class="line"><span class="meta">#</span><span class="bash"> Name</span></span><br><span class="line">sudo nvidia-smi mig -i 0 -cgi 3g.20gb</span><br></pre></td></tr></table></figure>
