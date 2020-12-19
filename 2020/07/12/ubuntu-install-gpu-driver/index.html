@@ -107,9 +107,9 @@
 
 <h4 id="移除舊有-GPU-驅動-1"><a href="#移除舊有-GPU-驅動-1" class="headerlink" title="移除舊有 GPU 驅動"></a>移除舊有 GPU 驅動</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get purge nvidia*</span><br></pre></td></tr></table></figure>
 
-<h4 id="安裝相依的軟體-1"><a href="#安裝相依的軟體-1" class="headerlink" title="安裝相依的軟體"></a>安裝相依的軟體</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install gcc make cmake dkms build-essential lib32ncurses5 lib32z1 lightdm</span><br></pre></td></tr></table></figure>
+<h4 id="安裝相依的軟體-1"><a href="#安裝相依的軟體-1" class="headerlink" title="安裝相依的軟體"></a>安裝相依的軟體</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install gcc make cmake dkms build-essential lib32ncurses5 lib32z1</span><br></pre></td></tr></table></figure>
 
-<h4 id="安裝驅動-1"><a href="#安裝驅動-1" class="headerlink" title="安裝驅動"></a>安裝驅動</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo bash NVIDIA-Linux-x86_64-450.51.05.run -no-opengl-files  -no-x-check -no-nouveau-check</span><br></pre></td></tr></table></figure>
+<h4 id="安裝驅動-1"><a href="#安裝驅動-1" class="headerlink" title="安裝驅動"></a>安裝驅動</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo bash NVIDIA-Linux-x86_64-450.51.05.run</span><br></pre></td></tr></table></figure>
 
 <h4 id="重新啟動"><a href="#重新啟動" class="headerlink" title="重新啟動"></a>重新啟動</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo update-initramfs -u</span><br><span class="line">sudo reboot</span><br></pre></td></tr></table></figure>
 
