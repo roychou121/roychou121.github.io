@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-TW" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ubuntu 18.04 建置 Kubernetes (支援 GPU) | 不務正業工程師的家</title><meta name="description" content="★ Coming soon ~~"><meta name="keywords" content="UBUNTU,KUBERNETES,DEEPOPS,NVIDIA"><meta name="author" content="Roy Chou"><meta name="copyright" content="Roy Chou"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://roychou121.github.io/2020/10/02/nvidia-deepops/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="4hHdI8zazPUWtdgydTrGs1GdWfRl5owrCaqeqB416kw"/><meta name="msvalidate.01" content="7C4615B89B83C771BFA3B9AE261D20EE"/><meta property="og:type" content="article"><meta property="og:title" content="Ubuntu 18.04 建置 Kubernetes (支援 GPU)"><meta property="og:url" content="https://roychou121.github.io/2020/10/02/nvidia-deepops/"><meta property="og:site_name" content="不務正業工程師的家"><meta property="og:description" content="★ Coming soon ~~"><meta property="og:image" content="https://roychou121.github.io/2020/10/02/nvidia-deepops/home.png"><meta property="article:published_time" content="2020-10-02T13:53:14.000Z"><meta property="article:modified_time" content="2020-10-02T13:53:14.000Z"><meta name="twitter:card" content="summary"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="prev" title="Multi-Instance GPU (MIG) 設定" href="https://roychou121.github.io/2020/10/29/nvidia-A100-MIG/"><link rel="next" title="Ubuntu 18.04 Proxy 設定" href="https://roychou121.github.io/2020/10/02/ubuntu-proxy/"><script async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+<!DOCTYPE html><html lang="zh-TW" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ubuntu 20.04 建置 Kubernetes (支援 GPU) | 不務正業工程師的家</title><meta name="description" content="Kubernetes（K8s）是一個開源系統，用於自動化容器應用程序的部署，擴展和管理。"><meta name="keywords" content="UBUNTU,KUBERNETES,DEEPOPS,NVIDIA"><meta name="author" content="Roy Chou"><meta name="copyright" content="Roy Chou"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://roychou121.github.io/2020/10/02/nvidia-deepops/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="4hHdI8zazPUWtdgydTrGs1GdWfRl5owrCaqeqB416kw"/><meta name="msvalidate.01" content="7C4615B89B83C771BFA3B9AE261D20EE"/><meta property="og:type" content="article"><meta property="og:title" content="Ubuntu 20.04 建置 Kubernetes (支援 GPU)"><meta property="og:url" content="https://roychou121.github.io/2020/10/02/nvidia-deepops/"><meta property="og:site_name" content="不務正業工程師的家"><meta property="og:description" content="Kubernetes（K8s）是一個開源系統，用於自動化容器應用程序的部署，擴展和管理。"><meta property="og:image" content="https://roychou121.github.io/2020/10/02/nvidia-deepops/home.png"><meta property="article:published_time" content="2020-10-02T13:53:14.000Z"><meta property="article:modified_time" content="2021-02-13T05:53:14.000Z"><meta name="twitter:card" content="summary"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="prev" title="Multi-Instance GPU (MIG) 設定" href="https://roychou121.github.io/2020/10/29/nvidia-A100-MIG/"><link rel="next" title="Ubuntu 18.04 Proxy 設定" href="https://roychou121.github.io/2020/10/02/ubuntu-proxy/"><script async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
   google_ad_client: 'ca-pub-2690168253582953',
   enable_page_level_ads: 'true'
 });</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
@@ -44,11 +44,170 @@
 .justified-gallery img{
   opacity: 1
 }
-</style></noscript><meta name="generator" content="Hexo 4.2.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">載入中...</div></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">21</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">標籤</div><div class="length_num">28</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分類</div><div class="length_num">11</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 推薦連結</span></a></div></div></div></div><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目錄</div><div class="sidebar-toc__progress"><span class="progress-notice">你已經讀了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li></ol></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/top.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">不務正業工程師的家</a></span><span class="pull-right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 推薦連結</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">Ubuntu 18.04 建置 Kubernetes (支援 GPU)</div></div><div id="post-meta"><div class="meta-firstline"><time class="post-meta__date"><span class="post-meta__date-created" title="發表於 2020-10-02 21:53:14"><i class="far fa-calendar-alt fa-fw"></i> 發表於 2020-10-02</span><span class="post-meta__separator">|</span><span class="post-meta__date-updated" title="更新於 2020-10-02 21:53:14"><i class="fas fa-history fa-fw"></i> 更新於 2020-10-02</span></time><span class="post-meta__categories"><span class="post-meta__separator">|</span><i class="fas fa-inbox fa-fw post-meta__icon"></i><a class="post-meta__categories" href="/categories/Linux/">Linux</a><i class="fas fa-angle-right post-meta__separator"></i><i class="fas fa-inbox fa-fw post-meta__icon"></i><a class="post-meta__categories" href="/categories/Linux/Kubernetes/">Kubernetes</a></span></div><div class="meta-secondline"> </div><div class="meta-thirdline"><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta__icon"></i><span>閱讀量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-commentcount"><span class="post-meta__separator">|</span><i class="far fa-comments fa-fw post-meta__icon"></i><span>評論數:</span><span class="disqus-comment-count comment-count"><a href="https://roychou121.github.io/2020/10/02/nvidia-deepops/#disqus_thread"></a></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+</style></noscript><meta name="generator" content="Hexo 4.2.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">載入中...</div></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">21</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">標籤</div><div class="length_num">28</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分類</div><div class="length_num">11</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 推薦連結</span></a></div></div></div></div><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目錄</div><div class="sidebar-toc__progress"><span class="progress-notice">你已經讀了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#介紹"><span class="toc-number">2.</span> <span class="toc-text">介紹</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#特性"><span class="toc-number">2.1.</span> <span class="toc-text">特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#版本"><span class="toc-number">2.2.</span> <span class="toc-text">版本</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#建置範例"><span class="toc-number">3.</span> <span class="toc-text">建置範例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#架構"><span class="toc-number">3.1.</span> <span class="toc-text">架構</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#事前準備"><span class="toc-number">3.2.</span> <span class="toc-text">事前準備</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#建置-Master-節點"><span class="toc-number">3.3.</span> <span class="toc-text">建置 Master 節點</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#建置-Compute-節點"><span class="toc-number">3.4.</span> <span class="toc-text">建置 Compute 節點</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#K8s-維護"><span class="toc-number">4.</span> <span class="toc-text">K8s 維護</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安裝-Kubernetes-Dashboard"><span class="toc-number">4.1.</span> <span class="toc-text">安裝 Kubernetes Dashboard</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安裝-Monitoring"><span class="toc-number">4.2.</span> <span class="toc-text">安裝 Monitoring</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#增加節點"><span class="toc-number">4.3.</span> <span class="toc-text">增加節點</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#移除節點"><span class="toc-number">4.4.</span> <span class="toc-text">移除節點</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#升級叢集"><span class="toc-number">4.5.</span> <span class="toc-text">升級叢集</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#參考資料"><span class="toc-number">5.</span> <span class="toc-text">參考資料</span></a></li></ol></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/top.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">不務正業工程師的家</a></span><span class="pull-right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 推薦連結</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">Ubuntu 20.04 建置 Kubernetes (支援 GPU)</div></div><div id="post-meta"><div class="meta-firstline"><time class="post-meta__date"><span class="post-meta__date-created" title="發表於 2020-10-02 21:53:14"><i class="far fa-calendar-alt fa-fw"></i> 發表於 2020-10-02</span><span class="post-meta__separator">|</span><span class="post-meta__date-updated" title="更新於 2021-02-13 13:53:14"><i class="fas fa-history fa-fw"></i> 更新於 2021-02-13</span></time><span class="post-meta__categories"><span class="post-meta__separator">|</span><i class="fas fa-inbox fa-fw post-meta__icon"></i><a class="post-meta__categories" href="/categories/Linux/">Linux</a><i class="fas fa-angle-right post-meta__separator"></i><i class="fas fa-inbox fa-fw post-meta__icon"></i><a class="post-meta__categories" href="/categories/Linux/Kubernetes/">Kubernetes</a></span></div><div class="meta-secondline"> </div><div class="meta-thirdline"><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta__icon"></i><span>閱讀量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-commentcount"><span class="post-meta__separator">|</span><i class="far fa-comments fa-fw post-meta__icon"></i><span>評論數:</span><span class="disqus-comment-count comment-count"><a href="https://roychou121.github.io/2020/10/02/nvidia-deepops/#disqus_thread"></a></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><div class="note info">
+            <p>2021/02/13 軟體版本更新至 v20.12</p>
+          </div>
+
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Kubernetes（K8s）是一個開源系統，用於自動化容器應用程序的部署，擴展和管理。<br>然而安裝 K8s 系統相當繁瑣，對於新手來說會遇到各式各樣的問題，更別說要建構一整座叢集了。好消息是，目前越來越多簡化 K8s 安裝步驟的工具，本章就要來介紹由 NVIDIA 維運的建置工具 <a href="https://github.com/NVIDIA/deepops" target="_blank" rel="noopener">DeepOps</a>。</p>
+<hr>
+<h2 id="介紹"><a href="#介紹" class="headerlink" title="介紹"></a>介紹</h2><p>DeepOps 項目主要用於快速佈署 Kubernetes 及 Slurm 在 GPU 服務器叢集和共享單個強大節點（例如 <a href="https://www.nvidia.com/zh-tw/data-center/dgx-systems/" target="_blank" rel="noopener">NVIDIA DGX Systems</a>）的最佳實踐。DeepOps 具高彈性，可以進行調整或以模塊化方式使用，以匹配特定使用情境的集群需求。</p>
+<h3 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h3><ul>
+<li>利用 Ansible 提供點到點來設置整個群集管理堆棧</li>
+<li>提供腳本可用於快速部署 Kubeflow 和連接 NFS 存儲</li>
+<li>可安裝 Slurm，Kubernetes 或兩者的混合 (Slurm 安裝將於日後另行介紹)</li>
+<li>提供 K8s 儀錶板及資源監控介面</li>
+</ul>
+<h3 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h3><ul>
+<li>20.12</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Component</th>
+<th align="center">v20.12</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Kubespray</td>
+<td align="center"><a href="https://github.com/kubernetes-incubator/kubespray/tree/75d648cae53eb6b83acb9b75b868ea29eec480d3" target="_blank" rel="noopener">75d648c</a></td>
+</tr>
+<tr>
+<td align="center"><a href="https://github.com/kubernetes/kubernetes" target="_blank" rel="noopener">Kubernetes</a></td>
+<td align="center">1.18.10</td>
+</tr>
+<tr>
+<td align="center"><a href="https://github.com/coreos/etcd" target="_blank" rel="noopener">Etcd</a></td>
+<td align="center">3.4.3</td>
+</tr>
+<tr>
+<td align="center"><a href="https://www.docker.com/" target="_blank" rel="noopener">Docker</a></td>
+<td align="center">19.03.14</td>
+</tr>
+<tr>
+<td align="center"><a href="https://github.com/projectcalico/calico" target="_blank" rel="noopener">Calico</a></td>
+<td align="center">3.15.2</td>
+</tr>
+<tr>
+<td align="center"><a href="https://helm.sh/" target="_blank" rel="noopener">Helm</a></td>
+<td align="center">3.1.2</td>
+</tr>
+<tr>
+<td align="center"><a href="https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/" target="_blank" rel="noopener">Dashboard</a></td>
+<td align="center">2.0.3</td>
+</tr>
+<tr>
+<td align="center"><a href="https://ngc.nvidia.com/catalog/containers/nvidia:k8s:dcgm-exporter" target="_blank" rel="noopener">DCGM Exporter</a></td>
+<td align="center">2.0.10-2.1.0-rc.1</td>
+</tr>
+<tr>
+<td align="center"><a href="https://prometheus-community.github.io/helm-charts" target="_blank" rel="noopener">Monitoring</a></td>
+<td align="center">10.0.2</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="建置範例"><a href="#建置範例" class="headerlink" title="建置範例"></a>建置範例</h2><h3 id="架構"><a href="#架構" class="headerlink" title="架構"></a>架構</h3><table>
+<thead>
+<tr>
+<th align="center">IP Address</th>
+<th align="center">Hostname</th>
+<th align="center">OS</th>
+<th align="center">GPU</th>
+<th align="center">Role</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">192.168.149.100</td>
+<td align="center">k8sm01</td>
+<td align="center">Ubuntu 20.04.2</td>
+<td align="center">NO</td>
+<td align="center">Master Node</td>
+</tr>
+<tr>
+<td align="center">192.168.149.101</td>
+<td align="center">k8sm02</td>
+<td align="center">Ubuntu 20.04.2</td>
+<td align="center">NO</td>
+<td align="center">Master Node</td>
+</tr>
+<tr>
+<td align="center">192.168.149.102</td>
+<td align="center">k8sm03</td>
+<td align="center">Ubuntu 20.04.2</td>
+<td align="center">NO</td>
+<td align="center">Master Node</td>
+</tr>
+<tr>
+<td align="center">192.168.149.103</td>
+<td align="center">k8sc01</td>
+<td align="center">Ubuntu 20.04.2</td>
+<td align="center">YES</td>
+<td align="center">Compute Node</td>
+</tr>
+<tr>
+<td align="center">192.168.149.104</td>
+<td align="center">k8sc02</td>
+<td align="center">Ubuntu 20.04.2</td>
+<td align="center">YES</td>
+<td align="center">Compute Node</td>
+</tr>
+</tbody></table>
+<h3 id="事前準備"><a href="#事前準備" class="headerlink" title="事前準備"></a>事前準備</h3><p>請在 Master Node 擇一節點操作</p>
+<p>下載 DeepOps 軟體包</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git clone --recurse-submodules https://github.com/NVIDIA/deepops.git -b 20.12</span><br><span class="line">cd deepops</span><br></pre></td></tr></table></figure>
+
+<p>安裝套件及產生 <code>config</code> 資料夾</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo -H ./scripts/setup.sh</span><br></pre></td></tr></table></figure>
+
+<p>編輯建置設定檔 (ini)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim config/inventory</span><br></pre></td></tr></table></figure>
+
+<p>將資料輸入之後存檔離開</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[all]</span><br><span class="line">k8sm01 ansible_host&#x3D;192.168.149.100 http_port&#x3D;22</span><br><span class="line">k8sm02 ansible_host&#x3D;192.168.149.101 http_port&#x3D;22</span><br><span class="line">k8sm03 ansible_host&#x3D;192.168.149.102 http_port&#x3D;22</span><br><span class="line">k8sc01 ansible_host&#x3D;192.168.149.103 http_port&#x3D;22</span><br><span class="line">k8sc02 ansible_host&#x3D;192.168.149.104 http_port&#x3D;22</span><br><span class="line"></span><br><span class="line">######</span><br><span class="line"># KUBERNETES</span><br><span class="line">######</span><br><span class="line">[kube-master]</span><br><span class="line">k8sm01</span><br><span class="line">k8sm02</span><br><span class="line">k8sm03</span><br><span class="line"></span><br><span class="line">[etcd]</span><br><span class="line">k8sm01</span><br><span class="line">k8sm02</span><br><span class="line">k8sm03</span><br><span class="line"></span><br><span class="line">[kube-node]</span><br><span class="line">k8sc01</span><br><span class="line">k8sc02</span><br><span class="line"></span><br><span class="line">[k8s-cluster:children]</span><br><span class="line">kube-master</span><br><span class="line">kube-node</span><br></pre></td></tr></table></figure>
+
+<h3 id="建置-Master-節點"><a href="#建置-Master-節點" class="headerlink" title="建置 Master 節點"></a>建置 Master 節點</h3><p>佈署管理節點 (Master Nodes)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible-playbook -l kube-master -k -K -vvv playbooks/k8s-cluster.yml</span><br></pre></td></tr></table></figure>
+
+<p>確認管理節點皆成功建置完成</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl get nodes</span><br></pre></td></tr></table></figure>
+
+<h3 id="建置-Compute-節點"><a href="#建置-Compute-節點" class="headerlink" title="建置 Compute 節點"></a>建置 Compute 節點</h3><p>佈署計算節點 (Compute Nodes)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible-playbook -l k8s-cluster -k -K -vvv playbooks/k8s-cluster.yml</span><br></pre></td></tr></table></figure>
+
+<p>確認計算節點皆成功建置完成</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl get nodes</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="K8s-維護"><a href="#K8s-維護" class="headerlink" title="K8s 維護"></a>K8s 維護</h2><h3 id="安裝-Kubernetes-Dashboard"><a href="#安裝-Kubernetes-Dashboard" class="headerlink" title="安裝 Kubernetes Dashboard"></a>安裝 Kubernetes Dashboard</h3><p>創建管理用戶並安裝儀錶板和 token，如日後忘記 token ，同指令可再執行一次即可獲得。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./scripts/k8s/deploy_dashboard_user.sh</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Dashboard: https://&lt; Master Node IP &gt;:31443</li>
+</ul>
+<h3 id="安裝-Monitoring"><a href="#安裝-Monitoring" class="headerlink" title="安裝 Monitoring"></a>安裝 Monitoring</h3><p>佈署 DCGM、Prometheus 和 Grafana 來監控各節點的資源使用情況</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./scripts/k8s/deploy_monitoring.sh</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Grafana: http://&lt; Master Node IP &gt;:30200</li>
+<li>Prometheus: http://&lt; Master Node IP &gt;:30500</li>
+<li>Alertmanager: http://&lt; Master Node IP &gt;:30400</li>
+</ul>
+<h3 id="增加節點"><a href="#增加節點" class="headerlink" title="增加節點"></a>增加節點</h3><p>回到建置設定檔 <code>config/inventory</code>，將新的節點加入後執行以下指令，即可增加節點</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible-playbook -l k8s-cluster -k -K submodules/kubespray/scale.yml</span><br></pre></td></tr></table></figure>
+
+<h3 id="移除節點"><a href="#移除節點" class="headerlink" title="移除節點"></a>移除節點</h3><p>將要移除的節點名稱填入，如下範例 (移除 k8sc01 及 k8sc02 兩個節點)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible-playbook submodules/kubespray/remove-node.yml --extra-vars "node=k8sc01,k8sc02"</span><br></pre></td></tr></table></figure>
+
+<h3 id="升級叢集"><a href="#升級叢集" class="headerlink" title="升級叢集"></a>升級叢集</h3><div class="note info">
+            <p>TODO</p>
+          </div>
+
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><ol>
+<li><a href="https://github.com/NVIDIA/deepops" target="_blank" rel="noopener">DeepOps Github</a></li>
+</ol>
 </div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Roy Chou</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章連結: </span><span class="post-copyright-info"><a href="https://roychou121.github.io/2020/10/02/nvidia-deepops/">https://roychou121.github.io/2020/10/02/nvidia-deepops/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版權聲明: </span><span class="post-copyright-info">本部落格所有文章除特別聲明外，均採用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 許可協議。轉載請註明來自 <a href="https://roychou121.github.io" target="_blank">不務正業工程師的家</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/NVIDIA/">NVIDIA</a><a class="post-meta__tags" href="/tags/KUBERNETES/">KUBERNETES</a><a class="post-meta__tags" href="/tags/DEEPOPS/">DEEPOPS</a></div><div class="post_share"><div class="social-share" data-image="/2021/02/04/ubuntu-network-bond/home.png" data-sites="facebook,linkedin,google,twitter,wechat"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"/><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script></div></div><div class="post-reward"><button class="reward-button"><i class="fas fa-qrcode"></i> 打賞<div class="reward-main"><ul class="reward-all"><li class="reward-item"><img class="post-qr-code__img" src="/img/Bitcoin.png" alt="Bitcoin" onclick="window.open('/img/Bitcoin.png')"/><div class="post-qr-code__desc">Bitcoin</div></li><li class="reward-item"><img class="post-qr-code__img" src="/img/Ethereum.png" alt="Ethereum" onclick="window.open('/img/Ethereum.png')"/><div class="post-qr-code__desc">Ethereum</div></li></ul></div></button></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/10/29/nvidia-A100-MIG/"><img class="prev-cover" data-src="/2020/10/29/nvidia-A100-MIG/home.png" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Multi-Instance GPU (MIG) 設定</div></div></a></div><div class="next-post pull-right"><a href="/2020/10/02/ubuntu-proxy/"><img class="next-cover" data-src="/2020/10/02/ubuntu-proxy/home.png" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Ubuntu 18.04 Proxy 設定</div></div></a></div></nav><hr><div id="post-comment"><div class="comment_headling"><i class="fas fa-comments fa-fw"></i><span> 評論</span></div><div id="disqus_thread"></div><script>var disqus_config = function () {
   this.page.url = 'https://roychou121.github.io/2020/10/02/nvidia-deepops/';
   this.page.identifier = '2020/10/02/nvidia-deepops/';
-  this.page.title = 'Ubuntu 18.04 建置 Kubernetes (支援 GPU)';
+  this.page.title = 'Ubuntu 20.04 建置 Kubernetes (支援 GPU)';
 };
 (function() { 
   var d = document, s = d.createElement('script');
