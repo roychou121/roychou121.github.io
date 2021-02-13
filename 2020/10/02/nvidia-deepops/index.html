@@ -108,73 +108,104 @@
 <h2 id="建置範例"><a href="#建置範例" class="headerlink" title="建置範例"></a>建置範例</h2><h3 id="架構"><a href="#架構" class="headerlink" title="架構"></a>架構</h3><table>
 <thead>
 <tr>
-<th align="center">IP Address</th>
 <th align="center">Hostname</th>
+<th align="center">IP Address</th>
+<th align="center">IP Interface</th>
+<th align="center">SSH Port</th>
 <th align="center">OS</th>
 <th align="center">GPU</th>
 <th align="center">Role</th>
 </tr>
 </thead>
 <tbody><tr>
-<td align="center">192.168.149.100</td>
 <td align="center">k8sm01</td>
+<td align="center">192.168.149.128</td>
+<td align="center">ens33</td>
+<td align="center">22</td>
 <td align="center">Ubuntu 20.04.2</td>
 <td align="center">NO</td>
 <td align="center">Master Node</td>
 </tr>
 <tr>
-<td align="center">192.168.149.101</td>
 <td align="center">k8sm02</td>
+<td align="center">192.168.149.129</td>
+<td align="center">ens33</td>
+<td align="center">22</td>
 <td align="center">Ubuntu 20.04.2</td>
 <td align="center">NO</td>
 <td align="center">Master Node</td>
 </tr>
 <tr>
-<td align="center">192.168.149.102</td>
 <td align="center">k8sm03</td>
+<td align="center">192.168.149.130</td>
+<td align="center">ens33</td>
+<td align="center">22</td>
 <td align="center">Ubuntu 20.04.2</td>
 <td align="center">NO</td>
 <td align="center">Master Node</td>
 </tr>
 <tr>
-<td align="center">192.168.149.103</td>
 <td align="center">k8sc01</td>
+<td align="center">192.168.149.134</td>
+<td align="center">ens33</td>
+<td align="center">22</td>
 <td align="center">Ubuntu 20.04.2</td>
 <td align="center">YES</td>
 <td align="center">Compute Node</td>
 </tr>
 <tr>
-<td align="center">192.168.149.104</td>
 <td align="center">k8sc02</td>
+<td align="center">192.168.149.135</td>
+<td align="center">ens33</td>
+<td align="center">22</td>
 <td align="center">Ubuntu 20.04.2</td>
 <td align="center">YES</td>
 <td align="center">Compute Node</td>
 </tr>
 </tbody></table>
-<h3 id="事前準備"><a href="#事前準備" class="headerlink" title="事前準備"></a>事前準備</h3><p>請在 Master Node 擇一節點操作</p>
+<h3 id="事前準備"><a href="#事前準備" class="headerlink" title="事前準備"></a>事前準備</h3><p>請在 Master Node 擇一節點操作，</p>
 <p>下載 DeepOps 軟體包</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git clone --recurse-submodules https://github.com/NVIDIA/deepops.git -b 20.12</span><br><span class="line">cd deepops</span><br></pre></td></tr></table></figure>
 
 <p>安裝套件及產生 <code>config</code> 資料夾</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo -H ./scripts/setup.sh</span><br></pre></td></tr></table></figure>
 
+<img src= "/img/loading.gif" data-src="/2020/10/02/nvidia-deepops/setup.PNG" class="" title="安裝套件">
+
 <p>編輯建置設定檔 (ini)</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim config/inventory</span><br></pre></td></tr></table></figure>
 
 <p>將資料輸入之後存檔離開</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[all]</span><br><span class="line">k8sm01 ansible_host&#x3D;192.168.149.100 http_port&#x3D;22</span><br><span class="line">k8sm02 ansible_host&#x3D;192.168.149.101 http_port&#x3D;22</span><br><span class="line">k8sm03 ansible_host&#x3D;192.168.149.102 http_port&#x3D;22</span><br><span class="line">k8sc01 ansible_host&#x3D;192.168.149.103 http_port&#x3D;22</span><br><span class="line">k8sc02 ansible_host&#x3D;192.168.149.104 http_port&#x3D;22</span><br><span class="line"></span><br><span class="line">######</span><br><span class="line"># KUBERNETES</span><br><span class="line">######</span><br><span class="line">[kube-master]</span><br><span class="line">k8sm01</span><br><span class="line">k8sm02</span><br><span class="line">k8sm03</span><br><span class="line"></span><br><span class="line">[etcd]</span><br><span class="line">k8sm01</span><br><span class="line">k8sm02</span><br><span class="line">k8sm03</span><br><span class="line"></span><br><span class="line">[kube-node]</span><br><span class="line">k8sc01</span><br><span class="line">k8sc02</span><br><span class="line"></span><br><span class="line">[k8s-cluster:children]</span><br><span class="line">kube-master</span><br><span class="line">kube-node</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[all]</span><br><span class="line">k8sm01 ansible_host&#x3D;192.168.149.128 ansible_port&#x3D;22 ansible_interfaces&#x3D;ens33</span><br><span class="line">k8sm02 ansible_host&#x3D;192.168.149.129 ansible_port&#x3D;22 ansible_interfaces&#x3D;ens33</span><br><span class="line">k8sm03 ansible_host&#x3D;192.168.149.130 ansible_port&#x3D;22 ansible_interfaces&#x3D;ens33</span><br><span class="line">k8sc01 ansible_host&#x3D;192.168.149.134 ansible_port&#x3D;22 ansible_interfaces&#x3D;ens33</span><br><span class="line">k8sc02 ansible_host&#x3D;192.168.149.135 ansible_port&#x3D;22 ansible_interfaces&#x3D;ens33</span><br><span class="line"></span><br><span class="line">######</span><br><span class="line"># KUBERNETES</span><br><span class="line">######</span><br><span class="line">[kube-master]</span><br><span class="line">k8sm01</span><br><span class="line">k8sm02</span><br><span class="line">k8sm03</span><br><span class="line"></span><br><span class="line">[etcd]</span><br><span class="line">k8sm01</span><br><span class="line">k8sm02</span><br><span class="line">k8sm03</span><br><span class="line"></span><br><span class="line">[kube-node]</span><br><span class="line">k8sc01</span><br><span class="line">k8sc02</span><br><span class="line"></span><br><span class="line">[k8s-cluster:children]</span><br><span class="line">kube-master</span><br><span class="line">kube-node</span><br></pre></td></tr></table></figure>
 
-<h3 id="建置-Master-節點"><a href="#建置-Master-節點" class="headerlink" title="建置 Master 節點"></a>建置 Master 節點</h3><p>佈署管理節點 (Master Nodes)</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible-playbook -l kube-master -k -K -vvv playbooks/k8s-cluster.yml</span><br></pre></td></tr></table></figure>
+<h3 id="建置-Master-節點"><a href="#建置-Master-節點" class="headerlink" title="建置 Master 節點"></a>建置 Master 節點</h3><p>佈署管理節點 (Master Nodes)，第一次使用需輸入 ssh(-k) 及 sudo(-K) 密碼</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible-playbook -l kube-master -k -K playbooks/k8s-cluster.yml</span><br></pre></td></tr></table></figure>
+
+<img src= "/img/loading.gif" data-src="/2020/10/02/nvidia-deepops/master.PNG" class="" title="佈署管理節點">
+
+<p>運行完成成功畫面，要確認 <code>failed</code> 為 <code>0</code></p>
+<img src= "/img/loading.gif" data-src="/2020/10/02/nvidia-deepops/master_output.PNG" class="" title="運行完成成功畫面">
 
 <p>確認管理節點皆成功建置完成</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl get nodes</span><br></pre></td></tr></table></figure>
 
-<h3 id="建置-Compute-節點"><a href="#建置-Compute-節點" class="headerlink" title="建置 Compute 節點"></a>建置 Compute 節點</h3><p>佈署計算節點 (Compute Nodes)</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible-playbook -l k8s-cluster -k -K -vvv playbooks/k8s-cluster.yml</span><br></pre></td></tr></table></figure>
+<img src= "/img/loading.gif" data-src="/2020/10/02/nvidia-deepops/master_nodes.PNG" class="" title="確認管理節點皆成功建置完成">
+
+<h3 id="建置-Compute-節點"><a href="#建置-Compute-節點" class="headerlink" title="建置 Compute 節點"></a>建置 Compute 節點</h3><p>佈署計算節點 (Compute Nodes)，第一次使用需輸入 ssh(-k) 及 sudo(-K) 密碼</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible-playbook -l k8s-cluster -k -K playbooks/k8s-cluster.yml</span><br></pre></td></tr></table></figure>
+
+<img src= "/img/loading.gif" data-src="/2020/10/02/nvidia-deepops/compute.PNG" class="" title="佈署計算節點">
+
+<p>運行完成成功畫面，要確認 <code>failed</code> 為 <code>0</code></p>
+<img src= "/img/loading.gif" data-src="/2020/10/02/nvidia-deepops/compute_output.PNG" class="" title="運行完成成功畫面">
+
+<p>設定 Compute 節點的 <code>kubernetes.io/role</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl label --overwrite nodes k8sc01 kubernetes.io/role=compute</span><br><span class="line">kubectl label --overwrite nodes k8sc02 kubernetes.io/role=compute</span><br></pre></td></tr></table></figure>
 
 <p>確認計算節點皆成功建置完成</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl get nodes</span><br></pre></td></tr></table></figure>
+
+<img src= "/img/loading.gif" data-src="/2020/10/02/nvidia-deepops/compute_nodes.PNG" class="" title="確認管理節點皆成功建置完成">
 
 <hr>
 <h2 id="K8s-維護"><a href="#K8s-維護" class="headerlink" title="K8s 維護"></a>K8s 維護</h2><h3 id="安裝-Kubernetes-Dashboard"><a href="#安裝-Kubernetes-Dashboard" class="headerlink" title="安裝 Kubernetes Dashboard"></a>安裝 Kubernetes Dashboard</h3><p>創建管理用戶並安裝儀錶板和 token，如日後忘記 token ，同指令可再執行一次即可獲得。</p>
